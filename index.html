@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeLearn - Learn to Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 768px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Language Selection Screen */
+        .language-selection {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .language-selection h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        .language-selection p {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .language-card {
+            background: #2a2a2a;
+            border: 2px solid #333;
+            border-radius: 16px;
+            padding: 30px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .language-card:hover {
+            border-color: #4CAF50;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
+        }
+
+        .language-card.selected {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .language-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .language-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .language-description {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .start-btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .start-btn.enabled {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .start-btn:hover.enabled {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* Learning Interface */
+        .learning-interface {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #4CAF50;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .current-language {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .lesson-counter {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .lesson-number {
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .lesson-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .lesson-description {
+            color: #bbb;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .concept-box {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .concept-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .concept-text {
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .code-example {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #333;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-tag {
+            color: #ff6b6b;
+        }
+
+        .code-content {
+            color: #50fa7b;
+        }
+
+        .code-attribute {
+            color: #8be9fd;
+        }
+
+        .interactive-section {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .task-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffb86c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Quick Insert Buttons */
+        .quick-insert {
+            margin-bottom: 15px;
+        }
+
+        .quick-insert-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .tag-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag-btn:hover {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .tag-btn:active {
+            transform: scale(0.95);
+        }
+
+        .code-input {
+            width: 100%;
+            background: #1e1e1e;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            color: #fff;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s ease;
+            min-height: 120px;
+        }
+
+        .code-input:focus {
+            border-color: #4CAF50;
+        }
+
+        .code-input.correct {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .code-input.incorrect {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .output-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .output-label {
+            color: #aaa;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .output-content {
+            color: #50fa7b;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+        }
+
+        .btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #4CAF50;
+            display: block;
+        }
+
+        .feedback.error {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .navigation {
+            padding: 20px;
+            border-top: 1px solid #333;
+            background: #222;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.prev {
+            background: #333;
+            color: #fff;
+        }
+
+        .nav-btn.next {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .hint-btn {
+            background: none;
+            border: none;
+            color: #ffb86c;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .hint-btn:hover {
+            background: rgba(255, 184, 108, 0.1);
+        }
+
+        .hint {
+            background: rgba(255, 184, 108, 0.1);
+            border: 1px solid #ffb86c;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            color: #ffb86c;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .language-selection h1 {
+                font-size: 2rem;
+            }
+            
+            .language-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+            
+            .lesson-container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 12px 15px;
+            }
+            
+            .lesson-title {
+                font-size: 1.2rem;
+            }
+            
+            .code-input {
+                font-size: 0.85rem;
+                padding: 12px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 12px;
+            }
+            
+            .navigation {
+                padding: 15px;
+            }
+            
+            .tag-buttons {
+                justify-content: center;
+            }
+            
+            .tag-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Language Selection Screen -->
+        <div class="language-selection" id="languageSelection">
+            <h1>📚 CodeLearn</h1>
+            <p>Choose a programming language to start learning</p>
+            
+            <div class="language-grid">
+                <div class="language-card" onclick="selectLanguage('html', this)">
+                    <span class="language-icon">🌐</span>
+                    <div class="language-name">HTML/CSS</div>
+                    <div class="language-description">Build web pages</div>
+                </div>
+                
+                <div class="language-card" onclick="selectLanguage('javascript', this)">
+                    <span class="language-icon">⚡</span>
+                    <div class="language-name">JavaScript</div>
+                    <div class="language-description">Add interactivity</div>
+                </div>
+                
+                <div class="language-card" onclick="selectLanguage('python', this)">
+                    <span class="language-icon">🐍</span>
+                    <div class="language-name">Python</div>
+                    <div class="language-description">Easy to learn</div>
+                </div>
+                
+                <div class="language-card" onclick="selectLanguage('java', this)">
+                    <span class="language-icon">☕</span>
+                    <div class="language-name">Java</div>
+                    <div class="language-description">Popular & powerful</div>
+                </div>
+            </div>
+            
+            <button class="start-btn" id="startBtn" onclick="startLearning()">
+                Start Learning →
+            </button>
+        </div>
+
+        <!-- Learning Interface -->
+        <div class="learning-interface" id="learningInterface">
+            <div class="header">
+                <div class="header-left">
+                    <button class="back-btn" onclick="goBackToSelection()">← Back</button>
+                    <div class="current-language" id="currentLanguage">HTML/CSS</div>
+                </div>
+                <div class="lesson-counter" id="lessonCounter">Lesson 1 of 2</div>
+            </div>
+
+            <div class="main-content">
+                <div class="lesson-container">
+                    <div class="lesson-header">
+                        <div class="lesson-number" id="lessonNumber">Lesson 1</div>
+                        <h2 class="lesson-title" id="lessonTitle">What is HTML?</h2>
+                    </div>
+
+                    <div class="lesson-content">
+                        <div class="lesson-description" id="lessonDescription">
+                            HTML stands for HyperText Markup Language. It's the standard language used to create web pages.
+                        </div>
+
+                        <div class="concept-box" id="conceptBox">
+                            <div class="concept-title">
+                                <span>💡</span> <span id="conceptTitle">HTML Headers</span>
+                            </div>
+                            <div class="concept-text" id="conceptText">
+                                Headers in HTML are used to create titles and headings. The <code>&lt;h1&gt;</code> tag creates the largest heading, and <code>&lt;h6&gt;</code> creates the smallest.
+                            </div>
+                            <div class="code-example" id="codeExample">
+<span class="code-tag">&lt;h1&gt;</span><span class="code-content">This is a big heading</span><span class="code-tag">&lt;/h1&gt;</span>
+<span class="code-tag">&lt;h2&gt;</span><span class="code-content">This is smaller</span><span class="code-tag">&lt;/h2&gt;</span>
+<span class="code-tag">&lt;h3&gt;</span><span class="code-content">Even smaller</span><span class="code-tag">&lt;/h3&gt;</span>
+                            </div>
+                        </div>
+
+                        <div class="interactive-section">
+                            <div class="task-title">
+                                <span>✏️</span> <span id="taskTitle">Try it yourself!</span>
+                            </div>
+                            <div id="taskDescription">Create an h1 heading that says "Welcome to my website":</div>
+                            
+                            <div class="quick-insert">
+                                <span class="quick-insert-label">Quick Insert:</span>
+                                <div class="tag-buttons" id="tagButtons">
+                                    <button class="tag-btn" onclick="insertTag('&lt;h1&gt;&lt;/h1&gt;')">&lt;h1&gt;&lt;/h1&gt;</button>
+                                    <button class="tag-btn" onclick="insertTag('&lt;h2&gt;&lt;/h2&gt;')">&lt;h2&gt;&lt;/h2&gt;</button>
+                                    <button class="tag-btn" onclick="insertTag('&lt;h3&gt;&lt;/h3&gt;')">&lt;h3&gt;&lt;/h3&gt;</button>
+                                    <button class="tag-btn" onclick="insertTag('&lt;p&gt;&lt;/p&gt;')">&lt;p&gt;&lt;/p&gt;</button>
+                                    <button class="tag-btn" onclick="insertTag('&lt;div&gt;&lt;/div&gt;')">&lt;div&gt;&lt;/div&gt;</button>
+                                    <button class="tag-btn" onclick="insertTag('&lt;span&gt;&lt;/span&gt;')">&lt;span&gt;&lt;/span&gt;</button>
+                                </div>
+                            </div>
+                            
+                            <textarea class="code-input" id="codeInput" placeholder="Type your code here..."></textarea>
+                            
+                            <button class="hint-btn" onclick="toggleHint()">💡 Need a hint?</button>
+                            <div class="hint" id="hint">
+                                Remember: HTML tags have opening and closing parts. Start with &lt;h1&gt; and end with &lt;/h1&gt;
+                            </div>
+
+                            <div class="controls">
+                                <button class="btn btn-primary" onclick="checkAnswer()" id="checkBtn">Check Answer</button>
+                                <button class="btn btn-secondary" onclick="resetCode()">Reset</button>
+                            </div>
+
+                            <div class="feedback" id="feedback"></div>
+
+                            <div class="output-section" id="outputSection" style="display: none;">
+                                <div class="output-label">Preview:</div>
+                                <div class="output-content" id="output"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn prev" onclick="previousLesson()" id="prevBtn" disabled>← Previous</button>
+                <button class="nav-btn next" onclick="nextLesson()" id="nextBtn" disabled>Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedLanguage = null;
+        let currentLesson = 1;
+        let lessonCompleted = false;
+
+        // Language data
+        const languageData = {
+            html: {
+                name: "HTML/CSS",
+                quickInsertTags: ["<h1></h1>", "<h2></h2>", "<h3></h3>", "<p></p>", "<div></div>", "<span></span>"],
+                lessons: [
+                    {
+                        number: 1,
+                        title: "What is HTML?",
+                        description: "HTML stands for HyperText Markup Language. It's the standard language used to create web pages.",
+                        concept: {
+                            title: "HTML Headers",
+                            text: "Headers in HTML are used to create titles and headings. The <code>&lt;h1&gt;</code> tag creates the largest heading, and <code>&lt;h6&gt;</code> creates the smallest.",
+                            example: `<span class="code-tag">&lt;h1&gt;</span><span class="code-content">This is a big heading</span><span class="code-tag">&lt;/h1&gt;</span>
+<span class="code-tag">&lt;h2&gt;</span><span class="code-content">This is smaller</span><span class="code-tag">&lt;/h2&gt;</span>
+<span class="code-tag">&lt;h3&gt;</span><span class="code-content">Even smaller</span><span class="code-tag">&lt;/h3&gt;</span>`
+                        },
+                        task: {
+                            title: "Try it yourself!",
+                            description: 'Create an h1 heading that says "Welcome to my website":',
+                            answer: '<h1>Welcome to my website</h1>',
+                            hint: "Remember: HTML tags have opening and closing parts. Start with &lt;h1&gt; and end with &lt;/h1&gt;"
+                        }
+                    },
+                    {
+                        number: 2,
+                        title: "HTML Paragraphs",
+                        description: "Paragraphs are blocks of text. They're one of the most basic elements in HTML.",
+                        concept: {
+                            title: "The &lt;p&gt; Tag",
+                            text: "The <code>&lt;p&gt;</code> tag is used to create paragraphs. Each paragraph is automatically separated with some space.",
+                            example: `<span class="code-tag">&lt;p&gt;</span><span class="code-content">This is my first paragraph.</span><span class="code-tag">&lt;/p&gt;</span>
+<span class="code-tag">&lt;p&gt;</span><span class="code-content">This is my second paragraph.</span><span class="code-tag">&lt;/p&gt;</span>`
+                        },
+                        task: {
+                            title: "Your turn!",
+                            description: 'Create a paragraph that says "I love learning HTML":',
+                            answer: '<p>I love learning HTML</p>',
+                            hint: "Use the &lt;p&gt; tag to wrap your text. Don't forget the closing tag!"
+                        }
+                    }
+                ]
+            },
+            javascript: {
+                name: "JavaScript",
+                quickInsertTags: ["let ", "const ", "function()", "console.log()", "if()", "for()"],
+                lessons: [
+                    {
+                        number: 1,
+                        title: "Variables in JavaScript",
+                        description: "Variables are containers for storing data values. In JavaScript, you can create variables using let, const, or var.",
+                        concept: {
+                            title: "Creating Variables",
+                            text: "Use <code>let</code> for variables that can change, and <code>const</code> for variables that stay the same.",
+                            example: `<span class="code-tag">let</span> <span class="code-content">name = "Alice";</span>
+<span class="code-tag">const</span> <span class="code-content">age = 25;</span>
+<span class="code-tag">console.log</span><span class="code-content">(name);</span>`
+                        },
+                        task: {
+                            title: "Create a variable!",
+                            description: 'Create a variable called "greeting" with the value "Hello World":',
+                            answer: 'let greeting = "Hello World";',
+                            hint: "Use 'let' followed by the variable name, then = and the value in quotes."
+                        }
+                    }
+                ]
+            },
+            python: {
+                name: "Python",
+                quickInsertTags: ["print()", "def ", "if ", "for ", "while ", "="],
+                lessons: [
+                    {
+                        number: 1,
+                        title: "Python Variables",
+                        description: "In Python, variables are created when you assign a value to them. No special keywords needed!",
+                        concept: {
+                            title: "Simple Variables",
+                            text: "Python variables are easy - just write the name, equals sign, and value.",
+                            example: `<span class="code-content">name = "Python"</span>
+<span class="code-content">age = 30</span>
+<span class="code-tag">print</span><span class="code-content">(name)</span>`
+                        },
+                        task: {
+                            title: "Create variables!",
+                            description: 'Create a variable called "language" with the value "Python":',
+                            answer: 'language = "Python"',
+                            hint: "Just write: variable_name = value"
+                        }
+                    }
+                ]
+            },
+            java: {
+                name: "Java",
+                quickInsertTags: ["public ", "class ", "String ", "int ", "System.out.println()", "="],
+                lessons: [
+                    {
+                        number: 1,
+                        title: "Java Basics",
+                        description: "Java is a strongly-typed language, which means you must declare the type of every variable.",
+                        concept: {
+                            title: "Variable Types",
+                            text: "In Java, you must specify the type of data a variable will hold.",
+                            example: `<span class="code-tag">String</span> <span class="code-content">name = "Java";</span>
+<span class="code-tag">int</span> <span class="code-content">age = 25;</span>
+<span class="code-tag">System.out.println</span><span class="code-content">(name);</span>`
+                        },
+                        task: {
+                            title: "Declare a variable!",
+                            description: 'Create a String variable called "message" with value "Hello Java":',
+                            answer: 'String message = "Hello Java";',
+                            hint: "Format: Type variableName = value;"
+                        }
+                    }
+                ]
+            }
+        };
+
+        function selectLanguage(lang, element) {
+            // Remove selection from all cards
+            const cards = document.querySelectorAll('.language-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            
+            // Add selection to clicked card
+            element.classList.add('selected');
+            selectedLanguage = lang;
+            
+            // Enable start button
+            document.getElementById('startBtn').classList.add('enabled');
+        }
+
+        function startLearning() {
+            if (!selectedLanguage) return;
+            
+            document.getElementById('languageSelection').style.display = 'none';
+            document.getElementById('learningInterface').style.display = 'flex';
+            
+            document.getElementById('currentLanguage').textContent = languageData[selectedLanguage].name;
+            updateQuickInsertButtons();
+            loadLesson(1);
+        }
+
+        function goBackToSelection() {
+            document.getElementById('languageSelection').style.display = 'flex';
+            document.getElementById('learningInterface').style.display = 'none';
+            selectedLanguage = null;
+            document.getElementById('startBtn').classList.remove('enabled');
+            document.querySelectorAll('.language-card').forEach(c => c.classList.remove('selected'));
+        }
+
+        function updateQuickInsertButtons() {
+            const tagButtons = document.getElementById('tagButtons');
+            const tags = languageData[selectedLanguage].quickInsertTags;
+            
+            tagButtons.innerHTML = '';
+            tags.forEach(tag => {
+                const button = document.createElement('button');
+                button.className = 'tag-btn';
+                button.textContent = tag;
+                button.onclick = () => insertTag(tag);
+                tagButtons.appendChild(button);
+            });
+        }
+
+        function insertTag(tag) {
+            const codeInput = document.getElementById('codeInput');
+            const cursorPos = codeInput.selectionStart;
+            const textBefore = codeInput.value.substring(0, cursorPos);
+            const textAfter = codeInput.value.substring(codeInput.selectionEnd);
+            
+            // Handle HTML tags with opening/closing pairs
+            if (tag.includes('><')) {
+                const openTag = tag.split('><')[0] + '>';
+                const closeTag = '<' + tag.split('><')[1];
+                codeInput.value = textBefore + openTag + closeTag + textAfter;
+                codeInput.focus();
+                codeInput.setSelectionRange(cursorPos + openTag.length, cursorPos + openTag.length);
+            } else {
+                codeInput.value = textBefore + tag + textAfter;
+                codeInput.focus();
+                codeInput.setSelectionRange(cursorPos + tag.length, cursorPos + tag.length);
+            }
+        }
+
+        function loadLesson(lessonIndex) {
+            const lessons = languageData[selectedLanguage].lessons;
+            const lesson = lessons[lessonIndex - 1];
+            if (!lesson) return;
+
+            currentLesson = lessonIndex;
+            document.getElementById('lessonNumber').textContent = `Lesson ${lesson.number}`;
+            document.getElementById('lessonTitle').textContent = lesson.title;
+            document.getElementById('lessonDescription').textContent = lesson.description;
+            document.getElementById('lessonCounter').textContent = `Lesson ${lessonIndex} of ${lessons.length}`;
+            
+            document.getElementById('conceptTitle').textContent = lesson.concept.title;
+            document.getElementById('conceptText').innerHTML = lesson.concept.text;
+            document.getElementById('codeExample').innerHTML = lesson.concept.example;
+            
+            document.getElementById('taskTitle').textContent = lesson.task.title;
+            document.getElementById('taskDescription').textContent = lesson.task.description;
+            document.getElementById('hint').innerHTML = lesson.task.hint;
+            
+            document.getElementById('codeInput').value = '';
+            document.getElementById('codeInput').className = 'code-input';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('outputSection').style.display = 'none';
+            
+            lessonCompleted = false;
+            updateNavigation();
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('codeInput').value.trim();
+            const lessons = languageData[selectedLanguage].lessons;
+            const correctAnswer = lessons[currentLesson - 1].task.answer.trim();
+            const feedback = document.getElementById('feedback');
+            const codeInput = document.getElementById('codeInput');
+            const outputSection = document.getElementById('outputSection');
+            const output = document.getElementById('output');
+
+            // Normalize answers for comparison
+            const normalizeCode = (code) => {
+                return code.replace(/\s+/g, ' ')
+                          .replace(/>\s+</g, '><')
+                          .toLowerCase()
+                          .trim();
+            };
+
+            if (normalizeCode(userAnswer) === normalizeCode(correctAnswer)) {
+                feedback.textContent = '🎉 Perfect! You got it right!';
+                feedback.className = 'feedback success';
+                feedback.style.display = 'block';
+                
+                codeInput.className = 'code-input correct';
+                
+                // Show preview
+                outputSection.style.display = 'block';
+                if (selectedLanguage === 'html') {
+                    output.innerHTML = userAnswer;
+                } else {
+                    output.textContent = userAnswer;
+                }
+                
+                lessonCompleted = true;
+                updateNavigation();
+            } else {
+                feedback.textContent = '❌ Not quite right. Check your code and try again!';
+                feedback.className = 'feedback error';
+                feedback.style.display = 'block';
+                
+                codeInput.className = 'code-input incorrect';
+                outputSection.style.display = 'none';
+            }
+        }
+
+        function resetCode() {
+            document.getElementById('codeInput').value = '';
+            document.getElementById('codeInput').className = 'code-input';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('outputSection').style.display = 'none';
+            document.getElementById('hint').style.display = 'none';
+        }
+
+        function toggleHint() {
+            const hint = document.getElementById('hint');
+            hint.style.display = hint.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function nextLesson() {
+            const totalLessons = languageData[selectedLanguage].lessons.length;
+            if (lessonCompleted && currentLesson < totalLessons) {
+                loadLesson(currentLesson + 1);
+            }
+        }
+
+        function previousLesson() {
+            if (currentLesson > 1) {
+                loadLesson(currentLesson - 1);
+                lessonCompleted = true; // Allow going back
+                updateNavigation();
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const totalLessons = languageData[selectedLanguage].lessons.length;
+            
+            prevBtn.disabled = currentLesson === 1;
+            nextBtn.disabled = !lessonCompleted || currentLesson === totalLessons;
+            
+            if (currentLesson === totalLessons && lessonCompleted) {
+                nextBtn.textContent = '🎉 Complete!';
+                nextBtn.disabled = true;
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
+    </script>
+</body>
+</html>
