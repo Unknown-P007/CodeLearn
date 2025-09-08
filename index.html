@@ -5,21 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeL - Learn to Code</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            font-family: system-ui, sans-serif;
             background: #1a1a1a;
-            color: #ffffff;
+            color: #fff;
             min-height: 100vh;
             line-height: 1.6;
         }
 
-        .app-container {
+        .container {
             max-width: 900px;
             margin: 0 auto;
             min-height: 100vh;
@@ -27,8 +23,8 @@
             flex-direction: column;
         }
 
-        /* Language Selection Screen */
-        .language-selection {
+        /* Language Selection */
+        .lang-select {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -36,24 +32,21 @@
             min-height: 100vh;
             padding: 40px 20px;
             text-align: center;
-            background: #1a1a1a;
         }
 
-        .language-selection h1 {
+        .lang-select h1 {
             font-size: 3rem;
             margin-bottom: 20px;
-            color: #ffffff;
             font-weight: 600;
         }
 
-        .language-selection p {
-            color: #cccccc;
+        .lang-select p {
+            color: #ccc;
             font-size: 1.2rem;
             margin-bottom: 50px;
-            font-weight: 400;
         }
 
-        .language-grid {
+        .lang-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
@@ -61,52 +54,49 @@
             max-width: 800px;
         }
 
-        .language-card {
+        .lang-card {
             background: #2a2a2a;
-            border: 1px solid #333333;
+            border: 1px solid #333;
             border-radius: 8px;
             padding: 30px 20px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             text-align: center;
         }
 
-        .language-card:hover {
-            background: #333333;
-            border-color: #444444;
+        .lang-card:hover {
+            background: #333;
+            border-color: #444;
         }
 
-        .language-icon {
+        .lang-icon {
             font-size: 3rem;
             margin-bottom: 15px;
             display: block;
         }
 
-        .language-name {
+        .lang-name {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #fff;
         }
 
-        .language-description {
+        .lang-desc {
             font-size: 0.95rem;
-            color: #aaaaaa;
-            font-weight: 400;
+            color: #aaa;
         }
 
         /* Learning Interface */
-        .learning-interface {
+        .learn-ui {
             display: none;
             flex-direction: column;
             min-height: 100vh;
-            background: #1a1a1a;
         }
 
         .header {
             padding: 20px 25px;
-            background: #333333;
-            border-bottom: 1px solid #444444;
+            background: #333;
+            border-bottom: 1px solid #444;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -119,58 +109,51 @@
         }
 
         .back-btn {
-            background: #444444;
-            border: 1px solid #555555;
-            color: #ffffff;
-            font-size: 0.9rem;
-            cursor: pointer;
+            background: #444;
+            border: 1px solid #555;
+            color: #fff;
             padding: 10px 18px;
             border-radius: 4px;
-            transition: all 0.2s ease;
-            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .back-btn:hover {
-            background: #555555;
-        }
+        .back-btn:hover { background: #555; }
 
-        .current-language {
+        .current-lang {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #ffffff;
         }
 
-        .lesson-counter {
+        .lesson-count {
             font-size: 0.9rem;
-            color: #aaaaaa;
-            font-weight: 400;
+            color: #aaa;
         }
 
-        .main-content {
+        .main {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .lesson-container {
+        .lesson-wrap {
             flex: 1;
             padding: 30px;
             display: flex;
             flex-direction: column;
         }
 
-        .lesson-header {
+        .lesson-head {
             margin-bottom: 30px;
             text-align: center;
         }
 
-        .lesson-number {
-            background: #555555;
+        .lesson-num {
+            background: #555;
             color: white;
             padding: 6px 16px;
             border-radius: 4px;
             font-size: 0.8rem;
-            font-weight: 500;
             display: inline-block;
             margin-bottom: 15px;
         }
@@ -179,97 +162,84 @@
             font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #fff;
         }
 
-        .lesson-description {
-            color: #cccccc;
-            font-size: 1rem;
+        .lesson-desc {
+            color: #ccc;
             margin-bottom: 30px;
             text-align: left;
-            line-height: 1.6;
         }
 
-        .concept-box {
+        .concept {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 25px;
             margin-bottom: 25px;
-            border: 1px solid #333333;
+            border: 1px solid #333;
         }
 
         .concept-title {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #ffffff;
             margin-bottom: 12px;
         }
 
         .concept-text {
-            color: #cccccc;
+            color: #ccc;
             margin-bottom: 15px;
-            line-height: 1.6;
-            font-size: 1rem;
         }
 
-        .code-example {
+        .code-ex {
             background: #1a1a1a;
             border-radius: 6px;
             padding: 15px;
-            border: 1px solid #333333;
+            border: 1px solid #333;
             margin: 15px 0;
-            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-family: monospace;
             font-size: 0.9rem;
             overflow-x: auto;
         }
 
-        .code-tag {
-            color: #ff6b9d;
-        }
+        .code-tag { color: #ff6b9d; }
+        .code-content { color: #6bcf7f; }
 
-        .code-content {
-            color: #6bcf7f;
-        }
-
-        .interactive-section {
+        .interactive {
             background: #2a2a2a;
             border-radius: 8px;
             padding: 25px;
             margin: 25px 0;
-            border: 1px solid #333333;
+            border: 1px solid #333;
         }
 
         .task-title {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #ffffff;
             margin-bottom: 15px;
         }
 
-        .quick-insert {
+        .quick-tools {
             margin-bottom: 20px;
         }
 
-        .quick-insert-label {
+        .tool-label {
             font-size: 0.95rem;
-            color: #cccccc;
+            color: #ccc;
             margin-bottom: 12px;
             display: block;
-            font-weight: 500;
         }
 
-        .button-group {
+        .btn-group {
             margin-bottom: 12px;
         }
 
-        .button-group-label {
+        .group-label {
             font-size: 0.85rem;
-            color: #aaaaaa;
+            color: #aaa;
             margin-bottom: 8px;
             display: block;
         }
 
-        .tag-buttons, .word-buttons {
+        .tag-btns, .word-btns {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -277,71 +247,56 @@
         }
 
         .tag-btn, .word-btn {
-            background: #444444;
+            background: #444;
             color: #fff;
-            border: 1px solid #555555;
+            border: 1px solid #555;
             border-radius: 4px;
             padding: 8px 12px;
             font-size: 0.85rem;
-            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 500;
+            transition: all 0.2s;
         }
 
         .word-btn {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #555555;
+            font-family: system-ui, sans-serif;
+            background: #555;
         }
 
-        .tag-btn:hover, .word-btn:hover {
-            background: #666666;
-        }
+        .tag-btn:hover, .word-btn:hover { background: #666; }
 
         .code-input {
             width: 100%;
             background: #1a1a1a;
-            border: 2px solid #444444;
+            border: 2px solid #444;
             border-radius: 6px;
             padding: 15px;
             color: #fff;
-            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-family: monospace;
             font-size: 0.9rem;
             resize: none;
             outline: none;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             min-height: 120px;
-            line-height: 1.4;
         }
 
-        .code-input:focus {
-            border-color: #666666;
-        }
+        .code-input:focus { border-color: #666; }
+        .code-input.correct { border-color: #4CAF50; }
+        .code-input.incorrect { border-color: #ff6b6b; }
 
-        .code-input.correct {
-            border-color: #4CAF50;
-        }
-
-        .code-input.incorrect {
-            border-color: #ff6b6b;
-        }
-
-        .preview-section {
+        .preview {
             margin-top: 20px;
             padding: 15px;
             background: #1a1a1a;
             border-radius: 6px;
-            border: 1px solid #333333;
+            border: 1px solid #333;
             display: none;
         }
 
         .preview-label {
-            color: #aaaaaa;
+            color: #aaa;
             font-size: 0.85rem;
             margin-bottom: 10px;
             text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.5px;
         }
 
         .preview-content {
@@ -349,7 +304,7 @@
             color: #000;
             padding: 15px;
             border-radius: 4px;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-family: system-ui, sans-serif;
             min-height: 50px;
             border: 1px solid #ddd;
         }
@@ -360,18 +315,16 @@
         }
 
         .preview-content p {
-            font-size: 1rem;
             margin: 0;
             color: #333;
-            line-height: 1.5;
         }
 
-        .console-output {
+        .console {
             background: #000;
             color: #0f0;
             padding: 15px;
             border-radius: 4px;
-            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-family: monospace;
             font-size: 0.9rem;
             min-height: 50px;
             white-space: pre-wrap;
@@ -389,36 +342,29 @@
             border: none;
             border-radius: 4px;
             font-size: 1rem;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .btn-primary {
-            background: #666666;
+            background: #666;
             color: white;
         }
 
         .btn-secondary {
-            background: #444444;
+            background: #444;
             color: white;
         }
 
-        .btn-primary:hover {
-            background: #777777;
-        }
-
-        .btn-secondary:hover {
-            background: #555555;
-        }
+        .btn-primary:hover { background: #777; }
+        .btn-secondary:hover { background: #555; }
 
         .btn:disabled {
-            background: #333333;
-            color: #666666;
+            background: #333;
+            color: #666;
             cursor: not-allowed;
         }
 
-        /* Skip button styles */
         .btn-skip {
             background: #ff6b6b;
             color: white;
@@ -426,13 +372,10 @@
             margin-top: 10px;
         }
 
-        .btn-skip:hover {
-            background: #ff5555;
-        }
+        .btn-skip:hover { background: #ff5555; }
 
-        /* Try counter styles */
-        .try-counter {
-            color: #aaaaaa;
+        .try-count {
+            color: #aaa;
             font-size: 0.85rem;
             margin-top: 10px;
             text-align: center;
@@ -442,7 +385,6 @@
             margin-top: 15px;
             padding: 15px;
             border-radius: 6px;
-            font-weight: 500;
             display: none;
         }
 
@@ -460,10 +402,10 @@
             display: block;
         }
 
-        .navigation {
+        .nav {
             padding: 20px 30px;
-            background: #333333;
-            border-top: 1px solid #444444;
+            background: #333;
+            border-top: 1px solid #444;
             display: flex;
             justify-content: space-between;
         }
@@ -472,185 +414,147 @@
             padding: 12px 25px;
             border: none;
             border-radius: 4px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.95rem;
+            transition: all 0.2s;
         }
 
         .nav-btn.prev {
-            background: #444444;
+            background: #444;
             color: #fff;
-            border: 1px solid #555555;
+            border: 1px solid #555;
         }
 
         .nav-btn.next {
-            background: #666666;
+            background: #666;
             color: white;
         }
 
         .nav-btn:disabled {
-            background: #333333;
-            color: #666666;
+            background: #333;
+            color: #666;
             cursor: not-allowed;
         }
 
-        .nav-btn:hover:not(:disabled) {
-            opacity: 0.9;
-        }
+        .nav-btn:hover:not(:disabled) { opacity: 0.9; }
 
         .hint-btn {
-            background: #444444;
-            border: 1px solid #555555;
-            color: #ffffff;
+            background: #444;
+            border: 1px solid #555;
+            color: #fff;
             cursor: pointer;
             padding: 10px 16px;
             border-radius: 4px;
             font-size: 0.9rem;
             margin-top: 12px;
-            transition: all 0.2s ease;
-            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        .hint-btn:hover {
-            background: #555555;
-        }
+        .hint-btn:hover { background: #555; }
 
         .hint {
             background: #2a2a2a;
-            border: 1px solid #444444;
+            border: 1px solid #444;
             border-radius: 6px;
             padding: 15px;
             margin-top: 12px;
-            color: #cccccc;
+            color: #ccc;
             font-size: 0.9rem;
             display: none;
-            line-height: 1.5;
         }
 
-        /* Mobile optimizations */
+        /* Mobile */
         @media (max-width: 768px) {
-            .language-selection h1 {
-                font-size: 2.2rem;
-            }
-            
-            .language-grid {
-                grid-template-columns: 1fr;
-                max-width: 350px;
-            }
-            
-            .lesson-container {
-                padding: 20px;
-            }
-            
-            .header {
-                padding: 15px 20px;
-            }
-            
-            .lesson-title {
-                font-size: 1.5rem;
-            }
-            
-            .code-input {
-                font-size: 0.85rem;
-                padding: 12px;
-                min-height: 100px;
-            }
-            
-            .controls {
-                flex-direction: column;
-            }
-            
-            .navigation {
-                padding: 15px 20px;
-            }
-            
-            .tag-btn, .word-btn {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
+            .lang-select h1 { font-size: 2.2rem; }
+            .lang-grid { grid-template-columns: 1fr; max-width: 350px; }
+            .lesson-wrap { padding: 20px; }
+            .header { padding: 15px 20px; }
+            .lesson-title { font-size: 1.5rem; }
+            .code-input { font-size: 0.85rem; padding: 12px; min-height: 100px; }
+            .controls { flex-direction: column; }
+            .nav { padding: 15px 20px; }
+            .tag-btn, .word-btn { padding: 6px 10px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <!-- Language Selection Screen -->
-        <div class="language-selection" id="languageSelection">
+        <div class="lang-select" id="languageSelection">
             <h1>CodeLearn</h1>
             <p>Choose a programming language to start your coding journey</p>
             
-            <div class="language-grid">
-                <div class="language-card" onclick="startLearning('html')">
-                    <span class="language-icon">🌐</span>
-                    <div class="language-name">HTML/CSS</div>
-                    <div class="language-description">Build stunning web pages</div>
+            <div class="lang-grid">
+                <div class="lang-card" onclick="startLearning('html')">
+                    <span class="lang-icon">🌐</span>
+                    <div class="lang-name">HTML/CSS</div>
+                    <div class="lang-desc">Build stunning web pages</div>
                 </div>
                 
-                <div class="language-card" onclick="startLearning('javascript')">
-                    <span class="language-icon">⚡</span>
-                    <div class="language-name">JavaScript</div>
-                    <div class="language-description">Add dynamic interactivity</div>
+                <div class="lang-card" onclick="startLearning('javascript')">
+                    <span class="lang-icon">⚡</span>
+                    <div class="lang-name">JavaScript</div>
+                    <div class="lang-desc">Add dynamic interactivity</div>
                 </div>
                 
-                <div class="language-card" onclick="startLearning('python')">
-                    <span class="language-icon">🐍</span>
-                    <div class="language-name">Python</div>
-                    <div class="language-description">Easy and powerful</div>
+                <div class="lang-card" onclick="startLearning('python')">
+                    <span class="lang-icon">🐍</span>
+                    <div class="lang-name">Python</div>
+                    <div class="lang-desc">Easy and powerful</div>
                 </div>
                 
-                <div class="language-card" onclick="startLearning('java')">
-                    <span class="language-icon">☕</span>
-                    <div class="language-name">Java</div>
-                    <div class="language-description">Enterprise-grade development</div>
+                <div class="lang-card" onclick="startLearning('java')">
+                    <span class="lang-icon">☕</span>
+                    <div class="lang-name">Java</div>
+                    <div class="lang-desc">Enterprise-grade development</div>
                 </div>
             </div>
         </div>
 
         <!-- Learning Interface -->
-        <div class="learning-interface" id="learningInterface">
+        <div class="learn-ui" id="learningInterface">
             <div class="header">
                 <div class="header-left">
                     <button class="back-btn" onclick="goBackToSelection()">← Back to Menu</button>
-                    <div class="current-language" id="currentLanguage">HTML/CSS</div>
+                    <div class="current-lang" id="currentLanguage">HTML/CSS</div>
                 </div>
-                <div class="lesson-counter" id="lessonCounter">Lesson 1 of 2</div>
+                <div class="lesson-count" id="lessonCounter">Lesson 1 of 2</div>
             </div>
 
-            <div class="main-content">
-                <div class="lesson-container">
-                    <div class="lesson-header">
-                        <div class="lesson-number" id="lessonNumber">Lesson 1</div>
+            <div class="main">
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <div class="lesson-num" id="lessonNumber">Lesson 1</div>
                         <h2 class="lesson-title" id="lessonTitle">What is HTML?</h2>
                     </div>
 
                     <div class="lesson-content">
-                        <div class="lesson-description" id="lessonDescription">
+                        <div class="lesson-desc" id="lessonDescription">
                             HTML stands for HyperText Markup Language. It's the standard language used to create web pages.
                         </div>
 
-                        <div class="concept-box" id="conceptBox">
+                        <div class="concept" id="conceptBox">
                             <div class="concept-title" id="conceptTitle">HTML Headers</div>
                             <div class="concept-text" id="conceptText">
                                 Headers in HTML are used to create titles and headings. The h1 tag creates the largest heading, and h6 creates the smallest.
                             </div>
-                            <div class="code-example" id="codeExample"></div>
+                            <div class="code-ex" id="codeExample"></div>
                         </div>
 
-                        <div class="interactive-section">
+                        <div class="interactive">
                             <div class="task-title" id="taskTitle">Try it yourself!</div>
                             <div id="taskDescription">Create a heading that says "Welcome to my website":</div>
                             
-                            <div class="quick-insert">
-                                <span class="quick-insert-label">Quick Insert Tools:</span>
+                            <div class="quick-tools">
+                                <span class="tool-label">Quick Insert Tools:</span>
                                 
-                                <div class="button-group">
-                                    <span class="button-group-label">Tags:</span>
-                                    <div class="tag-buttons" id="tagButtons"></div>
+                                <div class="btn-group">
+                                    <span class="group-label">Tags:</span>
+                                    <div class="tag-btns" id="tagButtons"></div>
                                 </div>
 
-                                <div class="button-group">
-                                    <span class="button-group-label">Words:</span>
-                                    <div class="word-buttons" id="wordButtons"></div>
+                                <div class="btn-group">
+                                    <span class="group-label">Words:</span>
+                                    <div class="word-btns" id="wordButtons"></div>
                                 </div>
                             </div>
                             
@@ -663,13 +567,13 @@
                                 <button class="btn btn-primary" onclick="showPreview()" id="previewBtn">Show Preview & Check</button>
                             </div>
 
-                            <div class="try-counter" id="tryCounter"></div>
+                            <div class="try-count" id="tryCounter"></div>
                             
                             <button class="btn btn-skip" onclick="skipLesson()" id="skipBtn">Skip Lesson</button>
 
                             <div class="feedback" id="feedback"></div>
 
-                            <div class="preview-section" id="previewSection">
+                            <div class="preview" id="previewSection">
                                 <div class="preview-label">Preview:</div>
                                 <div class="preview-content" id="previewContent"></div>
                             </div>
@@ -678,7 +582,7 @@
                 </div>
             </div>
 
-            <div class="navigation">
+            <div class="nav">
                 <button class="nav-btn prev" onclick="previousLesson()" id="prevBtn" disabled>Previous</button>
                 <button class="nav-btn next" onclick="nextLesson()" id="nextBtn" disabled>Next</button>
             </div>
